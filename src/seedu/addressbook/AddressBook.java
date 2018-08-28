@@ -483,10 +483,15 @@ public class AddressBook {
      * @return list of persons in full model with name containing some of the keywords
      */
     private static ArrayList<String[]> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
+        Set<String> lowerkeywords = new HashSet<String>(); //a container to put my lower case keywords.
+        for (String keyword : keywords) {
+            lowerkeywords.add( keyword.toLowerCase());
+        }
+
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
         for (String[] person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            final Set<String> wordsInName = new HashSet<>(splitByWhitespace((getNameFromPerson(person)).toLowerCase() ));
+            if (!Collections.disjoint(wordsInName, lowerkeywords)) { //comparison now between the lowercase versons of their names; the originals are still NoRmAL CaSE
                 matchedPersons.add(person);
             }
         }
